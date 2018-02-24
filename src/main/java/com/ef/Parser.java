@@ -15,5 +15,6 @@ public class Parser {
 	   System.out.println("Press \"ENTER\" to exit...");
 	   Scanner scanner = new Scanner(System.in);
 	   scanner.nextLine();
+	   scanner.close();
 	}
 }

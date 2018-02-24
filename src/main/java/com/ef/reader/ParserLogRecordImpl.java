@@ -12,6 +12,8 @@ import com.ef.reader.vo.LogRecordVO;
 
 public class ParserLogRecordImpl implements ParserLogRecord {
 	
+	private static final String STRIP_QUOTER = "\"";
+	
 	private String delimiter;
 	
 	private SimpleDateFormat dateFormat;
@@ -40,9 +42,11 @@ public class ParserLogRecordImpl implements ParserLogRecord {
 			res = new LogRecordVO();
 			res.setDate(parseDate(strings[0]));
 			res.setIp(strings[1]);
-			res.setRequest(strings[2]);
+			res.setRequest(StringUtils.strip(strings[2], STRIP_QUOTER));
 			res.setStatus(parseInteger(strings[3]));
-			res.setUserAgent(strings[4]);
+			res.setUserAgent(StringUtils.strip(strings[4], STRIP_QUOTER));
+		} else {
+			throw new ParserException(String.format("Can't parse [%s]", record));
 		}
 		
 		return res;
