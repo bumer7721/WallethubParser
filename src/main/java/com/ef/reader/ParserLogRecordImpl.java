@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import com.ef.exception.ParserException;
 import com.ef.reader.vo.LogRecordVO;
 
+@Component
 public class ParserLogRecordImpl implements ParserLogRecord {
 	
 	private static final String STRIP_QUOTER = "\"";

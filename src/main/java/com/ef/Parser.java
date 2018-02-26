@@ -1,25 +1,18 @@
 package com.ef;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
 import com.ef.db.model.LogRecord;
 import com.ef.db.repository.LogRecordRepository;
-import com.ef.reader.ParserLogRecord;
-import com.ef.reader.ParserLogRecordImpl;
-import com.ef.reader.vo.LogRecordVO;
+import com.ef.runner.ParserRunner;
 
 @SpringBootApplication
 public class Parser implements CommandLineRunner {
@@ -28,6 +21,9 @@ public class Parser implements CommandLineRunner {
 	
 	@Autowired
 	private LogRecordRepository logRecordRepository;
+	
+	@Autowired
+	private ParserRunner parserRunner;
 	
 	public static void main(String [] args) throws IOException {
 		SpringApplication.run(Parser.class, args);
@@ -42,6 +38,8 @@ public class Parser implements CommandLineRunner {
 			LOGGER.info(x.getId().toString());
 			LOGGER.info(x.getDate().toString());
 		});
+		
+		parserRunner.run();
 		
 //		ParserLogRecord parserLogRecord = new ParserLogRecordImpl();
 //		LineIterator it = FileUtils.lineIterator(new File("./access.log"));
