@@ -10,4 +10,6 @@ public interface LogRecordService extends BaseService<LogRecord> {
 
 	List<LogRecord> getLogRecordsThatExceedThreshold(Date startDate, Duration duration, Integer threshold);
 
+	List<LogRecord> getLogRecordsByIp(String ip);
+
 }

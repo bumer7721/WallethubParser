@@ -35,9 +35,6 @@ repositories {
 }
 
 dependencies {
-	//compile('org.springframework.boot:spring-boot-starter-web:1.5.10.RELEASE') { 
-		//exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-	//}
 	compile (group: 'org.springframework.boot', name: 'spring-boot-starter') {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
@@ -58,31 +55,3 @@ dependencies {
 	testCompile group: 'org.exparity', name: 'hamcrest-date', version: '2.0.4'
 	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
-
-//jar {
-    //manifest {
-      //  attributes 'Main-Class': 'com.ef.Parser'
-    //}
-    //from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-//}
-
-//task fatJar(type: Jar) {
-//	manifest {
-//        attributes 'Main-Class': 'com.ef.Parser'
-//    }
-//    baseName = 'parser'
-//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-//    with jar
-//}
-
-
-//bootRepackage {
-	//excludeDevtools = false
-    //mainClass = 'com.ef.Parser'
-//}
-
-//springBoot {
-   //mainClass = 'com.ef.Parser'
-   //executable=true
-	//layout = 'MODULE'
-//}

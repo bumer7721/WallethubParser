@@ -40,4 +40,13 @@ public class LogRecordServiceImpl extends BaseServiceImpl<LogRecord> implements 
 			return cb.between(r.get("date"), startDate, endDate);
 		};
 	}
+	
+	@Override
+	public List<LogRecord> getLogRecordsByIp(String ip) {
+		return findAll(equalIp(ip));
+	}
+	
+	private Specification<LogRecord> equalIp(String ip) {
+		return (r,q,cb) -> cb.equal(r.get("ip"), ip);
+	}
 }
