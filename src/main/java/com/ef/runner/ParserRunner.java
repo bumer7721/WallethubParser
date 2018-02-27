@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.ef.db.model.BlockedIp;
 import com.ef.db.model.LogRecord;
+import com.ef.db.service.BlockedIpService;
 import com.ef.db.service.LogRecordService;
 import com.ef.exception.ParserException;
 import com.ef.reader.ParserLogRecord;
@@ -33,6 +35,9 @@ public class ParserRunner {
 	
 	@Autowired
 	private LogRecordService logRecordService;
+	
+	@Autowired
+	private BlockedIpService blockedIpService;
 	
 	public ParserRunner() {
 		setParserLogRecord(new ParserLogRecordImpl());
@@ -72,12 +77,14 @@ public class ParserRunner {
 				.getLogRecordsThatExceedThreshold(parameters.getStartDate(), parameters.getDuration(), parameters.getThreshold());
 		if (!CollectionUtils.isEmpty(logRecordsThatExceedThreshold)) {
 			Date endDate = DateUtils.addHours(parameters.getStartDate(), parameters.getDuration().getHours()); 
-			LOGGER.info(String.format("IPs that made more than %d requests starting from %s to %s"
+			String commonMessage = String.format("made more than %d requests starting from %s to %s"
 					, parameters.getThreshold()
 					, DateFormatUtils.format(parameters.getStartDate(), DATE_FORMAT)
-					, DateFormatUtils.format(endDate, DATE_FORMAT)));
+					, DateFormatUtils.format(endDate, DATE_FORMAT));
+			LOGGER.info("IPs that " + commonMessage);
 			for (LogRecord logRecord : logRecordsThatExceedThreshold) {
 				LOGGER.info(logRecord.getIp());
+				moveToBlokedIp(logRecord, "It "+commonMessage);
 			}
 		}
 	}
@@ -90,5 +97,12 @@ public class ParserRunner {
 		logRecord.setStatus(src.getStatus());		
 		logRecord.setUserAgent(src.getUserAgent());
 		return logRecord;
+	}
+	
+	private BlockedIp moveToBlokedIp(LogRecord logRecord, String comment) {
+		BlockedIp blockedIp = new BlockedIp();
+		blockedIp.setIp(logRecord.getIp());
+		blockedIp.setComment(comment);
+		return blockedIpService.create(blockedIp);
 	}
 }
