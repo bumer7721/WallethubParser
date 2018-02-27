@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 
 import com.ef.db.model.BlockedIp;
 import com.ef.db.repository.BlockedIpRepository;
+import com.ef.db.service.BlockedIpService;
 
 @Service
-public class BlockedServiceImpl extends BaseServiceImpl<BlockedIp> {
+public class BlockedServiceImpl extends BaseServiceImpl<BlockedIp> implements BlockedIpService {
 	
 	@Autowired
 	private BlockedIpRepository blockedIpRepository;
