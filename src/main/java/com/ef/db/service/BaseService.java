@@ -8,6 +8,8 @@ public interface BaseService<T> {
 
 	T create(T entity);
 	
+	List<T> create(List<T> entities);
+	
 	T update(T entity);
 	
 	void delete(T entity);

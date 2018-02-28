@@ -20,6 +20,11 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 	}
 	
 	@Override
+	public List<T> create(List<T> entities) {
+		return getRepository().save(entities);
+	}
+	
+	@Override
 	public T update(T entity) {
 		return getRepository().saveAndFlush(entity);
 	}

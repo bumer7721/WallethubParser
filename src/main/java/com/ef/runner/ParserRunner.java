@@ -2,6 +2,7 @@ package com.ef.runner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class ParserRunner {
 		
 		int lineNumber = 0;
 		try {
+			List<LogRecord> logRecordsBatchCreate = new ArrayList<>(1000);
 		    while (it.hasNext()) {
 		    	++lineNumber;
 		    	System.out.print("\rProcess row #" + lineNumber);
@@ -64,10 +66,19 @@ public class ParserRunner {
 		        try {
 		        	LogRecordVO logRecord = parserLogRecord.parseRecord(line);
 		        	LogRecord logRecordEntity = voToEntity(logRecord);
-		        	logRecordEntity = logRecordService.create(logRecordEntity);
+		        	logRecordsBatchCreate.add(logRecordEntity);
+		        	if (logRecordsBatchCreate.size()==1000) {
+		        		logRecordService.create(logRecordsBatchCreate);
+		        		logRecordsBatchCreate.clear();
+		        	}
 				} catch (ParserException e) {
 					LOGGER.warn(String.format("Record #%d: %s. It will be skipped.", lineNumber, e.getMessage()));
 				}
+		    }
+		    
+		    if (!CollectionUtils.isEmpty(logRecordsBatchCreate)) {
+		    	logRecordService.create(logRecordsBatchCreate);
+		    	logRecordsBatchCreate.clear();
 		    }
 		} finally {
 		    LineIterator.closeQuietly(it);
